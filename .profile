@@ -10,10 +10,12 @@ pwd_alias() { echo "$PWD" ;}
 
 dock_volume() { docker volume create --name myvolume; \
                 docker run -it --rm -v myvolume:/workdir busybox chown -R 1000:1000 /workdir }
+# docker network create yocto_network
+toaster_dock() { docker run -it --name=bitbake_server --rm -p 127.0.0.1:18000:8000 -v myvolume:/workdir -v ${HOME}/.ssh:/home/toasteruser/.ssh toaster  }
 
-toaster_dock() { docker run -it --rm -p 127.0.0.1:18000:8000 -v myvolume:/workdir -v ${HOME}/.ssh:/home/toasteruser/.ssh toaster }
+# docker create -t -p 445:445 --name samba -v myvolume:/workdir crops/samba
 samba_dock() { docker start samba && sudo ifconfig lo0 127.0.0.2 alias up }
-yocto_dock() { docker run -it --rm -v myvolume:/workdir -v ${HOME}/.ssh:/home/yoctouser/.ssh --workdir=/workdir crops/yocto:ubuntu-16.04-base $@; }
+yocto_dock() { docker run -it --rm --name=bitbake_client -v $(pwd_alias)/..:/ws -v myvolume:/workdir -v ${HOME}/.ssh:/home/yoctouser/.ssh --workdir=/workdir crops/yocto:fedora-27-base $@; }
 
 export PATH="/usr/local/opt/findutils/libexec/gnubin:/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 export MANPATH="/usr/local/opt/findutils/libexec/gnuman:/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
