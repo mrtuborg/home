@@ -26,6 +26,7 @@ yocto_dock() { docker run -it --rm --name=bitbake_client -v $(pwd_alias)/..:/ws 
                               -v $(pwd_alias)/..:/ws \
 			      -v myvolume:/workdir \
                               crops/poky:fedora-27 --workdir=/ws/$(cwd) --cmd $@; }
+ poky_sdk() { poky_dock ". /workdir/poky_sdk/2.3.3/environment-setup-cortexa7hf-neon-poky-linux-gnueabi; $*"; }
 
 
 export PATH="${HOME}/bin:/usr/local/opt/findutils/libexec/gnubin:/usr/local/opt/coreutils/libexec/gnubin:$PATH"
