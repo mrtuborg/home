@@ -16,8 +16,10 @@ if [[ "${1}" == "http://"* ]]; then
    file="${file%.*}"
 else
    file=${1}
-   [[ "${1##*.}" == "gz" ]] && echo "Extracting gz..." && gunzip "${file}"    
-   file="${file%.*}"
+   echo "file: ${file}, extension: ${file##*.}"
+   [[ "${file##*.}"    == "gz"  ]] && echo "Extracting gz..." && gunzip "${file}" && file="${file%.*}"
+   echo "unzipped: ${file}, extension: ${file##*.}"
+   [[ "${file##*.}" == "wic" ]] && extra_options="iflag=fullblock conv=fsync"
 fi
 
 diskutil list $2
@@ -27,7 +29,8 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 1
 fi
 
+set -x
 diskutil umountDisk $2
-pv ${file} | dd of=$2 bs=1M
+pv ${file} | dd of=$2 bs=1M ${extra_options}
 diskutil umountDisk $2
-
+set +x

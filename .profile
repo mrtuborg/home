@@ -1,36 +1,19 @@
-SDK_ver=2.1.3
-poky_sdk_dir=${HOME}/sdk/${SDK_ver}
-pwd_alias() { echo "$PWD" ;}
-      cwd() { basename $(pwd_alias); }
-     dock() { docker run -it -v${poky_sdk_dir}:/opt/poky/${SDK_ver} \
-                                              -v $(pwd_alias)/..:/ws \
-                             -w /ws/$(cwd) --env-file ${HOME}/fedora-23-dev.2.1.3.env fedora-23-dev $@; }
+## export GOROOT=${HOME}/go
+## export GOPATH=${GOROOT}/packages
 
+export GOPATH=${HOME}/go
+export PATH=$PATH:${GOPATH}/bin
 
+notify() {
+	osascript -e "display notification \"$2\" with title \"$1\"";
+	spotifyPause $3
+}
 
-dock_volume() { docker volume create --name myvolume; \
-                docker run -it --rm -v myvolume:/workdir busybox chown -R 1000:1000 /workdir }
-# docker network create yocto_network
-toaster_dock() { docker run -it --name=bitbake_server --rm -p 127.0.0.1:18000:8000 -p 127.0.0.1:18001:8001 \
-                              -v $(pwd_alias)/..:/workdir \
-                              -v ${HOME}/.ssh:/home/usersetup/.ssh \
-			      --workdir /workdir/$(cwd) \
-                              crops/toaster:Dockerfile.ubuntu ;  }
-
-# docker create -t -p 445:445 --name samba -v myvolume:/workdir crops/samba
-samba_dock() { docker start samba && sudo ifconfig lo0 127.0.0.2 alias up; } 
-# mount -t smbfs //GUEST@127.0.0.2/workdir ; }
-yocto_dock() { docker run -it --rm --name=bitbake_client -v $(pwd_alias)/..:/ws -v myvolume:/workdir -v ${HOME}/.ssh:/home/yoctouser/.ssh --workdir=/workdir crops/yocto:fedora-27-base $@; }
-
- poky_dock() { mkdir -p $(pwd_alias)/../poky_tmp; docker run -it --rm --name=poky -p 127.0.0.1:12340:1234 \
-                              -v $(pwd_alias)/..:/ws \
-			      -v myvolume:/workdir \
-                              crops/poky:fedora-27 --workdir=/ws/$(cwd) --cmd $@; }
- poky_sdk() { poky_dock ". /workdir/poky_sdk/2.3.3/environment-setup-cortexa7hf-neon-poky-linux-gnueabi; $*"; }
-
-
-export PATH="${HOME}/bin:/usr/local/opt/findutils/libexec/gnubin:/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+export PATH="/usr/local/opt/findutils/libexec/gnubin:/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 export MANPATH="/usr/local/opt/findutils/libexec/gnuman:/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+
+export PATH="/usr/local/opt/pcsc-lite/bin:$PATH"
+export PATH="/usr/local/opt/pcsc-lite/sbin:$PATH"
 
 git config --global alias.lg "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
 git config --global alias.lg-ascii "log --graph --pretty=format:'%h -%d %s (%cr) <%an>' --abbrev-commit"
@@ -46,4 +29,55 @@ alias gsb="git branch -avv"
 
 alias fzf="fzf -m"
 alias glog="git lg | fzf"
+
+alias dcdown="docker-compose down --rmi all --remove-orphans"
+alias dcup="docker-compose up --build"
+
+export PATH="/usr/local/opt/libiconv/bin:$PATH"
+export PATH="/usr/local/opt/gettext/bin:$PATH"
+export PATH="/usr/local/opt/llvm/bin:$PATH"
+export PATH="$(brew --prefix)/sbin:$PATH"
+export PATH="/usr/local/opt/qt/bin:$PATH"
+
+HISTFILE="${HOME}/.tty_history_$(basename $(tty))"
+
+export PATH="/usr/local/toolchains/gcc-arm-atsam4e-eabi/bin:$PATH"
+export PATH="/usr/local/opt/openssl/bin:$PATH"
+
+export JAVA_HOME=`/usr/libexec/java_home`
+
+PATH=${PATH}:/usr/local/Cellar/volatility/2.6_1/bin
+export PATH="/usr/local/opt/texinfo/bin:$PATH"
+export PATH=${PATH}:/usr/local/Cellar/plantuml/1.2018.9/bin
+export PATH=${HOME}/bin:${PATH}
+
+export PATH="${HOME}/.rbenv/bin:${HOME}/.rbenv/shims:$PATH"
+eval "$(rbenv init -)"
+
+alias ussh="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "
+alias showvm="VBoxManage showvminfo "
+alias startvm="VBoxManage startvm --type headless "
+alias listvm="VBoxManage list vms "
+
+stopvm() {
+ 	VBoxManage controlvm $@ poweroff;
+}
+
+export PATH=${PATH}:/usr/local/opt/go/libexec/bin:${HOME}/go/bin
+export PATH=${PATH}:${HOME}/go/src/github.com/privacybydesign/irmago
+
+node_path() {
+	export PATH="/usr/bin:/usr/local/opt/node@8/bin:$PATH"
+}
+
+export PATH="/usr/local/opt/icu4c/bin:$PATH"
+export PATH="/usr/local/opt/icu4c/sbin:$PATH"
+
+export NODE_BINARY="/usr/local/opt/node@8/bin/node"
+
+export LC_ALL=en_US.UTF-8  
+export LANG=en_US.UTF-8
+
+export PATH="${PATH}:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+export PATH="/usr/bin:${PATH}"
 

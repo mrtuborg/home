@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo Previous status = ${1}
+
+if [[ "${1}" != "started" ]]; then
+   SpotifyControl pause
+fi
+

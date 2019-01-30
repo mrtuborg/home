@@ -1,0 +1,6 @@
+#!/bin/bash
+
+if [[ $(spotifyStatus) != "started" ]]; then
+	SpotifyControl play
+fi
+
