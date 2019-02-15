@@ -6,6 +6,7 @@ go/
 !.gitignore
 !.profile
 !.zshrc
+!.oh-my-zsh/
 # etc...
 
 # ...even if they are in subdirectories
