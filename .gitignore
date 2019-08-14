@@ -5,6 +5,8 @@
 !.gitignore
 !.profile
 !.zshrc
+!.vimrc
+!vim
 #.oh-my-zsh/
 # etc...
 
