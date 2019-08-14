@@ -1,12 +1,11 @@
 # Ignore everything
 *
-go/
 
 # But not these files...
 !.gitignore
 !.profile
 !.zshrc
-!.oh-my-zsh/
+#.oh-my-zsh/
 # etc...
 
 # ...even if they are in subdirectories
