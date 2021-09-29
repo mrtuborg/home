@@ -1,7 +1,7 @@
 # Java
-export PATH="${HOME}/.jenv/bin:${PATH}"
-export JAVA_HOME=$(/usr/libexec/java_home)
-eval "$(jenv init -)"
+# export PATH="${HOME}/.jenv/bin:${PATH}"
+# export JAVA_HOME=$(/usr/libexec/java_home)
+# eval "$(jenv init -)"
 
 # VirtualBox
 #############
